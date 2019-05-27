@@ -49,7 +49,6 @@ RUN wget -q https://storage.googleapis.com/kubernetes-release/release/v$KUBE_VER
 WORKDIR /usr/keptn
 COPY ./manifests manifests
 COPY ./scripts scripts
-
 COPY MANIFEST scripts
 
 RUN cd ./scripts && ls -lsa

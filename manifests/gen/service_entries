@@ -1,0 +1,60 @@
+  - match:
+    - port: 443
+      sni_hosts:
+      - tno85405.live.dynatrace.com
+    route:
+    - destination:
+        host: tno85405.live.dynatrace.com
+        port:
+          number: 443
+          name: HTTPS
+  - match:
+    - port: 443
+      sni_hosts:
+      - sg-us-east-1-34-196-118-31-prod22-virginia.live.ruxit.com
+    route:
+    - destination:
+        host: sg-us-east-1-34-196-118-31-prod22-virginia.live.ruxit.com
+        port:
+          number: 443
+          name: HTTPS
+  - match:
+    - port: 443
+      sni_hosts:
+      - sg-us-east-1-34-207-16-42-prod22-virginia.live.ruxit.com
+    route:
+    - destination:
+        host: sg-us-east-1-34-207-16-42-prod22-virginia.live.ruxit.com
+        port:
+          number: 443
+          name: HTTPS
+  - match:
+    - port: 443
+      sni_hosts:
+      - sg-us-east-1-35-172-94-162-prod22-virginia.live.ruxit.com
+    route:
+    - destination:
+        host: sg-us-east-1-35-172-94-162-prod22-virginia.live.ruxit.com
+        port:
+          number: 443
+          name: HTTPS
+  - match:
+    - port: 443
+      sni_hosts:
+      - sg-us-east-1-18-211-248-143-prod22-virginia.live.ruxit.com
+    route:
+    - destination:
+        host: sg-us-east-1-18-211-248-143-prod22-virginia.live.ruxit.com
+        port:
+          number: 443
+          name: HTTPS
+  - match:
+    - port: 443
+      sni_hosts:
+      - sg-us-east-1-54-174-161-61-prod22-virginia.live.ruxit.com
+    route:
+    - destination:
+        host: sg-us-east-1-54-174-161-61-prod22-virginia.live.ruxit.com
+        port:
+          number: 443
+          name: HTTPS

@@ -15,11 +15,17 @@ This is the first release of the keptn installer, which has been extraced from t
 
 keptn is installed by using these images from the [keptn Dockerhub registry](https://hub.docker.com/u/keptn):
 
+Installer:
 - keptn/installer:0.2.2
+
+Core services:
 - keptn/authenticator:0.2.2
 - keptn/control:0.2.2
 - keptn/eventbroker:0.2.2
 - keptn/eventbroker-ext:0.2.2
+- keptn/bridge:0.1.0
+
+keptn services:
 - keptn/pitometer-service:0.1.2
 - keptn/servicenow-service:0.1.1
 - keptn/github-service:0.2.0

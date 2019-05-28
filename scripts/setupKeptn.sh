@@ -5,6 +5,7 @@ CONTROL_RELEASE="develop"
 AUTHENTICATOR_RELEASE="develop"
 EVENTBROKER_RELEASE="develop"
 EVENTBROKER_EXT_RELEASE="develop"
+BRIDGE_RELEASE="develop"
 
 source ./utils.sh
 
@@ -84,6 +85,11 @@ cat ../manifests/keptn/control.yaml | \
 kubectl delete -f ../manifests/keptn/gen/control.yaml --ignore-not-found
 kubectl apply -f ../manifests/keptn/gen/control.yaml
 verify_kubectl $? "Deploying keptn control component failed."
+
+# Deploy keptn's bridge
+kubectl delete -f https://raw.githubusercontent.com/keptn/bridge/$BRIDGE_RELEASE/bridge.yaml --ignore-not-found
+kubectl apply -f https://raw.githubusercontent.com/keptn/bridge/$BRIDGE_RELEASE/bridge.yaml
+verify_kubectl $? "Deploying keptn's bridge failed."
 
 # Set up SSL
 ISTIO_INGRESS_IP=$(kubectl describe svc istio-ingressgateway -n istio-system | grep "LoadBalancer Ingress:" | sed 's~LoadBalancer Ingress:[ \t]*~~')

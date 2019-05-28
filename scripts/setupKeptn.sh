@@ -87,8 +87,8 @@ kubectl apply -f ../manifests/keptn/gen/control.yaml
 verify_kubectl $? "Deploying keptn control component failed."
 
 # Deploy keptn's bridge
-kubectl delete -f https://raw.githubusercontent.com/keptn/bridge/$BRIDGE_RELEASE/bridge.yaml --ignore-not-found
-kubectl apply -f https://raw.githubusercontent.com/keptn/bridge/$BRIDGE_RELEASE/bridge.yaml
+kubectl delete -f https://raw.githubusercontent.com/keptn/bridge/$BRIDGE_RELEASE/config/bridge.yaml --ignore-not-found
+kubectl apply -f https://raw.githubusercontent.com/keptn/bridge/$BRIDGE_RELEASE/config/bridge.yaml
 verify_kubectl $? "Deploying keptn's bridge failed."
 
 # Set up SSL

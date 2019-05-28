@@ -43,7 +43,8 @@ kubectl -n keptn create secret generic dynatrace --from-literal="DT_API_TOKEN=$D
 verify_kubectl $? "Creating dynatrace secret for keptn services failed."
 
 # Create dynatrace-service
-DT_SERVICE_RELEASE="0.1.0"
+DT_SERVICE_RELEASE="release-0.1.1"
+
 print_info "Deploying dynatrace-service $DT_SERVICE_RELEASE"
 kubectl apply -f https://raw.githubusercontent.com/keptn/dynatrace-service/$DT_SERVICE_RELEASE/dynatrace-service.yaml
 verify_kubectl $? "Deploying dynatrace-service failed."

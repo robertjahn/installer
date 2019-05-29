@@ -140,8 +140,8 @@ rm $SERVICENAME-deployment.yaml
 SERVICENAME=bridge
 print_debug "Install $SERVICENAME"
 BRIDGE_RELEASE="release-0.1.0"
-kubectl delete -f https://raw.githubusercontent.com/keptn/bridge/$BRIDGE_RELEASE/bridge.yaml --ignore-not-found
-kubectl apply -f https://raw.githubusercontent.com/keptn/bridge/$BRIDGE_RELEASE/bridge.yaml
+kubectl delete -f https://raw.githubusercontent.com/keptn/bridge/$BRIDGE_RELEASE/config/bridge.yaml --ignore-not-found
+kubectl apply -f https://raw.githubusercontent.com/keptn/bridge/$BRIDGE_RELEASE/config/bridge.yaml
 verify_kubectl $? "Deploying keptn's bridge failed."
 
 SERVICENAME=jenkins-deployment

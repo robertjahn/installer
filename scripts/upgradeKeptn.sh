@@ -65,12 +65,13 @@ kubectl delete revision $SERVICE_REVISION -n keptn
 rm $SERVICENAME-deployment.yaml
 
 
-SERVICENAME=eventbroker
+SERVICENAME=event-broker
+IMAGENAME=eventbroker
 print_debug "Update $SERVICENAME service"
 SERVICE_REVISION=$(kubectl get revisions --namespace=keptn | grep $SERVICENAME | cut -d' ' -f1)
 kubectl get ksvc $SERVICENAME -n keptn -o=yaml > $SERVICENAME-deployment.yaml
 verify_kubectl $? "$SERVICENAME could not be retrieved."
-yq w -i $SERVICENAME-deployment.yaml spec.runLatest.configuration.revisionTemplate.spec.container.image keptn/$SERVICENAME:0.2.2.latest
+yq w -i $SERVICENAME-deployment.yaml spec.runLatest.configuration.revisionTemplate.spec.container.image keptn/$IMAGENAME:0.2.2.latest
 kubectl apply -f $SERVICENAME-deployment.yaml
 verify_kubectl $? "Updating of $SERVICENAME failed."
 print_debug "Removing old revision of $SERVICENAME service"
@@ -78,12 +79,13 @@ kubectl delete revision $SERVICE_REVISION -n keptn
 rm $SERVICENAME-deployment.yaml
 
 
-SERVICENAME=eventbroker-ext
+SERVICENAME=event-broker-ext
+IMAGENAME=eventbroker-ext
 print_debug "Update $SERVICENAME service"
 SERVICE_REVISION=$(kubectl get revisions --namespace=keptn | grep $SERVICENAME | cut -d' ' -f1)
 kubectl get ksvc $SERVICENAME -n keptn -o=yaml > $SERVICENAME-deployment.yaml
 verify_kubectl $? "$SERVICENAME could not be retrieved."
-yq w -i $SERVICENAME-deployment.yaml spec.runLatest.configuration.revisionTemplate.spec.container.image keptn/$SERVICENAME:0.2.2.latest
+yq w -i $SERVICENAME-deployment.yaml spec.runLatest.configuration.revisionTemplate.spec.container.image keptn/$IMAGENAME:0.2.2.latest
 kubectl apply -f $SERVICENAME-deployment.yaml
 verify_kubectl $? "Updating of $SERVICENAME failed."
 print_debug "Removing old revision of $SERVICENAME service"
@@ -212,6 +214,6 @@ if [[ $RETRY == $RETRY_MAX ]]; then
   exit 1
 fi
 
-echo "Upgrade to keptn 0.2.1 done."
+echo "Upgrade to keptn 0.2.2 done."
 echo "You can find your Jenkins here: http://jenkins.keptn.$GATEWAY.xip.io/configure"
 echo "Please verify and save your Jenkins configuration."

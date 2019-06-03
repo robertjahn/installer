@@ -2,8 +2,9 @@
 
 source ./utils.sh
 
-REGISTRY_URL=$(kubectl describe svc docker-registry -n keptn | grep IP: | sed 's~IP:[ \t]*~~')
-verify_variable "$REGISTRY_URL" "REGISTRY_URL is empty and could not be derived from docker registry service."
+# JAHN:Skipping for now
+#REGISTRY_URL=$(kubectl describe svc docker-registry -n keptn | grep IP: | sed 's~IP:[ \t]*~~')
+#verify_variable "$REGISTRY_URL" "REGISTRY_URL is empty and could not be derived from docker registry service."
 
 # Environment variables for jenkins-service
 if [[ -z "${JENKINS_USER}" ]]; then
@@ -48,12 +49,13 @@ mkdir keptn-services
 cd keptn-services
 
 # Install services
-git clone --branch 0.3.0 https://github.com/keptn/jenkins-service.git --single-branch
-cd jenkins-service
-chmod +x deploy.sh
-./deploy.sh $REGISTRY_URL $JENKINS_USER $JENKINS_PASSWORD $GITHUB_USER_NAME $GITHUB_USER_EMAIL $GITHUB_ORGANIZATION $GITHUB_PERSONAL_ACCESS_TOKEN
-verify_install_step $? "Deploying jenkins-service failed."
-cd ..
+# JAHN:Skipping for now
+#git clone --branch 0.3.0 https://github.com/keptn/jenkins-service.git --single-branch
+#cd jenkins-service
+#chmod +x deploy.sh
+#./deploy.sh $REGISTRY_URL $JENKINS_USER $JENKINS_PASSWORD $GITHUB_USER_NAME $GITHUB_USER_EMAIL $GITHUB_ORGANIZATION $GITHUB_PERSONAL_ACCESS_TOKEN
+#verify_install_step $? "Deploying jenkins-service failed."
+#cd ..
 
 git clone --branch 0.2.0 https://github.com/keptn/github-service.git --single-branch
 cd github-service
@@ -81,7 +83,8 @@ cd ..
 ##############################################
 wait_for_all_pods_in_namespace "keptn"
 
-wait_for_deployment_in_namespace "jenkins-service" "keptn"
+# JAHN:Skipping for now
+#wait_for_deployment_in_namespace "jenkins-service" "keptn"
 wait_for_deployment_in_namespace "github-service" "keptn"
 wait_for_deployment_in_namespace "servicenow-service" "keptn"
 wait_for_deployment_in_namespace "pitometer-service" "keptn"

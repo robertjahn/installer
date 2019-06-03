@@ -2,6 +2,7 @@
 # Creds files
 scripts/creds.json
 scripts/*creds*.json
+scripts/*creds*.bak*
 scripts/creds_dt.json
 
 # Auto-generated files
@@ -10,6 +11,8 @@ manifests/gen/k8s-jenkins-deployment.yml
 manifests/gen/cr.yml
 manifests/gen/config-domain.yaml
 manifests/gen/istio-knative.yaml
+manifests/gen/keptn-domain-configmap.yaml
+manifests/keptn/gen/control.yaml
 scripts/logs/*.log
 scripts/keptn-services/*
 

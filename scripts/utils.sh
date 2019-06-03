@@ -145,3 +145,71 @@ function wait_for_crds() {
     exit 1
   fi
 }
+
+# Testing connection to Kubernetes
+function verify_kubectl_connection() {
+  print_info "Testing connection to Kubernetes API by running 'kubectl get namespaces'"
+  kubectl get namespaces
+  verify_kubectl $? "Cannot get output from kubectl"
+  print_info "Connection to cluster successful"
+}
+
+# validate environment variable values and read from creds.json if required
+function get_keptn_credentials_as_variables() {
+  print_info "Setting Keptn Credentials as Variables for: $DEPLOYMENT_NAME" 
+  case $DEPLOYMENT in
+    aks)
+      if [[ -z "${AZURE_SUBSCRIPTION}" ]]; then
+        print_debug "AZURE_SUBSCRIPTION is not set, reading it from creds.json"
+        export AZURE_SUBSCRIPTION=$(cat creds.json | jq -r '.azureSubscription')
+        verify_variable "$AZURE_SUBSCRIPTION" "AZURE_SUBSCRIPTION is not defined in environment variable nor in creds.json file." 
+      fi  
+      if [[ -z "${AZURE_LOCATION}" ]]; then
+        print_debug "AZURE_LOCATION is not set, reading it from creds.json"
+        export AZURE_LOCATION=$(cat creds.json | jq -r '.azureLocation')
+        verify_variable "$AZURE_LOCATION" "AZURE_LOCATION is not defined in environment variable nor in creds.json file." 
+      fi 
+      if [[ -z "${AZURE_CLUSTER_NAME}" ]]; then
+        print_debug "AZURE_CLUSTER_NAME is not set, reading it from creds.json"
+        export AZURE_CLUSTER_NAME=$(cat creds.json | jq -r '.azureClusterName')
+        verify_variable "$AZURE_CLUSTER_NAME" "AZURE_CLUSTER_NAME is not defined in environment variable nor in creds.json file." 
+      fi 
+      if [[ -z "${AZURE_RESOURCEGROUP}" ]]; then
+        print_debug "AZURE_RESOURCEGROUP is not set, reading it from creds.json"
+        export AZURE_RESOURCEGROUP=$(cat creds.json | jq -r '.azureResourceGroup')
+        verify_variable "$AZURE_RESOURCEGROUP" "AZURE_RESOURCEGROUP is not defined in environment variable nor in creds.json file." 
+      fi 
+      ;;
+    eks)
+      echo "$DEPLOYMENT NOT SUPPORTED"
+      exit 1
+      ;;
+    ocp)
+      echo "$DEPLOYMENT NOT SUPPORTED"
+      exit 1
+      ;;
+    gke)
+      if [[ -z "${CLUSTER_NAME}" ]]; then
+        print_debug "CLUSTER_NAME is not set, reading it from creds.json"
+        export CLUSTER_NAME=$(cat creds.json | jq -r '.clusterName')
+        verify_variable "$CLUSTER_NAME" "CLUSTER_NAME is not defined in environment variable nor in creds.json file." 
+      fi
+      if [[ -z "${CLUSTER_ZONE}" ]]; then
+        print_debug "CLUSTER_ZONE is not set, reading it from creds.json"
+        export CLUSTER_ZONE=$(cat creds.json | jq -r '.clusterZone')
+        verify_variable "$CLUSTER_ZONE" "CLUSTER_NAME is not defined in environment variable nor in creds.json file." 
+      fi   
+      if [[ -z "${GKE_PROJECT}" ]]; then
+        print_debug "GKE_PROJECT not set, reading it from creds.json"
+        export GKE_PROJECT=$(cat creds.json | jq -r '.gkeProject')
+        verify_variable "$GKE_PROJECT" "GKE_PROJECT is not defined in environment variable nor in creds.json file." 
+      fi
+      ;;
+    *)
+      echo "ERROR: INVALID DEPLOYMENT TYPE"
+      exit 1      
+      ;;
+  esac
+  print_info "Setting Keptn Credentials as Variables Done" 
+}
+

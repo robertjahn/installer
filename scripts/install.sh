@@ -1,14 +1,45 @@
 #!/bin/bash
 
+source ./deploymentArgument.lib
+DEPLOYMENT=$1
+validate_deployment_argument $DEPLOYMENT
+
+echo $DEPLOYMENT_NAME
+exit 
+
 kubectl apply -f ../manifests/installer/rbac.yaml
 
-# Update installer.yaml
-CLUSTER_NAME=$(cat creds.json | jq -r '.clusterName')
-CLUSTER_ZONE=$(cat creds.json | jq -r '.clusterZone')
+case $DEPLOYMENT in
+  aks)
+    CLUSTER_NAME=$(cat creds.json | jq -r '.clusterName')
+    AZURE_SUBSCRIPTION=$(cat creds.json | jq -r '.azureSubscription')
+    AZURE_LOCATION=$(cat creds.json | jq -r '.azureLocation')
 
-CLUSTER_IPV4_CIDR=$(gcloud container clusters describe ${CLUSTER_NAME} --zone=${CLUSTER_ZONE} | yq r - clusterIpv4Cidr)
-SERVICES_IPV4_CIDR=$(gcloud container clusters describe ${CLUSTER_NAME} --zone=${CLUSTER_ZONE} | yq r - servicesIpv4Cidr)
-GCLOUD_USER=$(gcloud config get-value account)
+    CLUSTER_IPV4_CIDR=$(gcloud container clusters describe ${CLUSTER_NAME} --zone=${CLUSTER_ZONE} | yq r - clusterIpv4Cidr)
+    SERVICES_IPV4_CIDR=$(gcloud container clusters describe ${CLUSTER_NAME} --zone=${CLUSTER_ZONE} | yq r - servicesIpv4Cidr)
+    ;;
+  eks)
+    echo "$DEPLOYMENT NOT SUPPORTED"
+    exit 1
+    ;;
+  ocp)
+    echo "$DEPLOYMENT NOT SUPPORTED"
+    exit 1
+    ;;
+  gke)
+    # Update installer.yaml
+    CLUSTER_NAME=$(cat creds.json | jq -r '.clusterName')
+    CLUSTER_ZONE=$(cat creds.json | jq -r '.clusterZone')
+
+    CLUSTER_IPV4_CIDR=$(gcloud container clusters describe ${CLUSTER_NAME} --zone=${CLUSTER_ZONE} | yq r - clusterIpv4Cidr)
+    SERVICES_IPV4_CIDR=$(gcloud container clusters describe ${CLUSTER_NAME} --zone=${CLUSTER_ZONE} | yq r - servicesIpv4Cidr)
+    GCLOUD_USER=$(gcloud config get-value account)
+    ;;
+  *)
+    echo "ERROR: INVALID DEPLOYMENT TYPE"
+    exit 1      
+    ;;
+esac
 
 # For uniform:
 JENKINS_USER=$(cat creds.json | jq -r '.jenkinsUser')

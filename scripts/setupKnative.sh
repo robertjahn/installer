@@ -52,18 +52,6 @@ done
 kubectl apply -f https://raw.githubusercontent.com/knative/serving/v0.4.0/third_party/config/build/clusterrole.yaml
 verify_kubectl $? "Creating cluster role for knative failed."
 
-# Configure knative serving default domain
-rm -f ../manifests/gen/config-domain.yaml
-
-ISTIO_INGRESS_IP=$(kubectl describe svc istio-ingressgateway -n istio-system | grep "LoadBalancer Ingress:" | sed 's~LoadBalancer Ingress:[ \t]*~~')
-verify_variable "$ISTIO_INGRESS_IP" "ISTIO_INGRESS_IP is empty and could not be derived from the Istio ingress gateway." 
-
-cat ../manifests/knative/config-domain.yaml | \
-  sed 's~ISTIO_INGRESS_IP_PLACEHOLDER~'"$ISTIO_INGRESS_IP"'~' >> ../manifests/gen/config-domain.yaml
-
-kubectl apply -f ../manifests/gen/config-domain.yaml
-verify_kubectl $? "Creating configmap config-domain in knative-serving namespace failed."
-
 kubectl get configmap config-network -n knative-serving -o=yaml | yq w - data['istio.sidecar.includeOutboundIPRanges'] "$CLUSTER_IPV4_CIDR,$SERVICES_IPV4_CIDR" | kubectl apply -f - 
 verify_kubectl $? "Updating configmap config-network in knative-serving namespace failed."
 

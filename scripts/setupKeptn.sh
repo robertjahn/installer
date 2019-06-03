@@ -27,9 +27,9 @@ kubectl apply -f https://raw.githubusercontent.com/keptn/eventbroker/$EVENTBROKE
 verify_kubectl $? "Creating keptn-channel channel failed."
 wait_for_channel_in_namespace "keptn-channel" "keptn"
 
-kubectl apply -f https://raw.githubusercontent.com/keptn/eventbroker/$EVENTBROKER_RELEASE/config/new-artefact-channel.yaml
-verify_kubectl $? "Creating new-artefact channel failed."
-wait_for_channel_in_namespace "new-artefact" "keptn"
+kubectl apply -f https://raw.githubusercontent.com/keptn/eventbroker/$EVENTBROKER_RELEASE/config/new-artifact-channel.yaml
+verify_kubectl $? "Creating new-artifact channel failed."
+wait_for_channel_in_namespace "new-artifact" "keptn"
 
 kubectl apply -f https://raw.githubusercontent.com/keptn/eventbroker/$EVENTBROKER_RELEASE/config/configuration-changed-channel.yaml
 verify_kubectl $? "Creating configuration-changed channel failed."

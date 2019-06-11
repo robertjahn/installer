@@ -1,9 +1,9 @@
 .DS_Store
 # Creds files
 scripts/creds.json
-scripts/*creds*.json
+scripts/*creds*.json*
 scripts/*creds*.bak*
-scripts/creds_dt.json
+scripts/creds_dt.json*
 
 # Auto-generated files
 manifests/gen/installer.yaml

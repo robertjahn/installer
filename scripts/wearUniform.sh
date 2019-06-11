@@ -43,19 +43,21 @@ if [[ -z "${GITHUB_ORGANIZATION}" ]]; then
   verify_variable "$GITHUB_ORGANIZATION" "GITHUB_USER_EMAIL is not defined in environment variable nor in creds.json file." 
 fi
 
-# Clean-up working directory
+# Clean-up working directorycle
 rm -rf keptn-services
 mkdir keptn-services
 cd keptn-services
 
 # Install services
-# JAHN:Skipping for now
 #git clone --branch 0.3.0 https://github.com/keptn/jenkins-service.git --single-branch
-#cd jenkins-service
-#chmod +x deploy.sh
+#JAHN
+git clone --branch develop https://github.com/keptn/jenkins-service.git --single-branch
+cd jenkins-service
+chmod +x deploy.sh
 #./deploy.sh $REGISTRY_URL $JENKINS_USER $JENKINS_PASSWORD $GITHUB_USER_NAME $GITHUB_USER_EMAIL $GITHUB_ORGANIZATION $GITHUB_PERSONAL_ACCESS_TOKEN
-#verify_install_step $? "Deploying jenkins-service failed."
-#cd ..
+./deploy.sh "foo" $JENKINS_USER $JENKINS_PASSWORD $GITHUB_USER_NAME $GITHUB_USER_EMAIL $GITHUB_ORGANIZATION $GITHUB_PERSONAL_ACCESS_TOKEN
+verify_install_step $? "Deploying jenkins-service failed."
+cd ..
 
 git clone --branch 0.2.0 https://github.com/keptn/github-service.git --single-branch
 cd github-service
@@ -83,8 +85,7 @@ cd ..
 ##############################################
 wait_for_all_pods_in_namespace "keptn"
 
-# JAHN:Skipping for now
-#wait_for_deployment_in_namespace "jenkins-service" "keptn"
+wait_for_deployment_in_namespace "jenkins-service" "keptn"
 wait_for_deployment_in_namespace "github-service" "keptn"
 wait_for_deployment_in_namespace "servicenow-service" "keptn"
 wait_for_deployment_in_namespace "pitometer-service" "keptn"

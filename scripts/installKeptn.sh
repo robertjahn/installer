@@ -96,11 +96,10 @@ if [[ -z "${SERVICES_IPV4_CIDR}" ]]; then
   verify_variable "$SERVICES_IPV4_CIDR" "SERVICES_IPV4_CIDR is not defined in environment variable nor could it be retrieved" 
 fi
 
-print_debug "CLUSTER_IPV4_CIDR: $CLUSTER_IPV4_CIDR"
-print_debug "SERVICES_IPV4_CIDR: $SERVICES_IPV4_CIDR"
-
 # Install Istio service mesh
 print_info "Installing Istio"
+print_debug "using CLUSTER_IPV4_CIDR: $CLUSTER_IPV4_CIDR"
+print_debug "using SERVICES_IPV4_CIDR: $SERVICES_IPV4_CIDR"
 ./setupIstio.sh $CLUSTER_IPV4_CIDR $SERVICES_IPV4_CIDR
 verify_install_step $? "Installing Istio failed."
 print_info "Installing Istio done"
@@ -135,3 +134,23 @@ print_info "keptn api-token: $KEPTN_API_TOKEN"
 
 #print_info "To retrieve the keptn API token, please execute the following command:"
 #print_info "kubectl get secret keptn-api-token -n keptn -o=yaml | yq - r data.keptn-api-token | base64 --decode"
+
+exit
+
+# setup keptn cli
+export KEPTN_ENDPOINT=https://$(kubectl get ksvc -n keptn control -o=yaml | yq r - status.domain)
+export KEPTN_API_TOKEN=$(kubectl get secret keptn-api-token -n keptn -o=yaml | yq - r data.keptn-api-token | base64 --decode)
+
+echo "keptn endpoint: $KEPTN_ENDPOINT"
+echo "keptn api-token: $KEPTN_API_TOKEN"
+
+keptn auth --endpoint="$KEPTN_ENDPOINT" --api-token="$KEPTN_API_TOKEN"
+
+# setup json for running test app script
+vi /Users/rob.jahn/dev/keptn/keptn/install/scripts/creds.json
+cd /Users/rob.jahn/dev/keptn/keptn/test
+./testOnboarding.sh
+
+# send a example event
+keptn send event new-artifact --project=sockshop --service=carts --image=docker.io/keptnexamples/carts --tag=0.7.3
+

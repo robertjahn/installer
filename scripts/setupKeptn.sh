@@ -16,28 +16,21 @@ BRIDGE_RELEASE="0.1.0"
 
 source ./utils.sh
 
-case $DEPLOYMENT in
-  aks)
-    # JAHN:This is a hack for testing
-    DOMAIN=jahn-demo-aks-ingress.eastus.cloudapp.azure.com
-    ;;
-  *)
-    # Domain used for routing to keptn services
-    DOMAIN=$(kubectl get svc istio-ingressgateway -o json -n istio-system | jq -r .status.loadBalancer.ingress[0].hostname)
-    if [[ $? != 0 ]]; then
-      print_error "Failed to get ingress gateway information." && exit 1
-    fi
-    if [[ $DOMAIN = "null" ]]; then
-      print_info "Could not get ingress gateway domain name. Trying to retrieve IP address instead."
-      DOMAIN=$(kubectl get svc istio-ingressgateway -o json -n istio-system | jq -r .status.loadBalancer.ingress[0].ip)
-      if [[ $DOMAIN = "null" ]]; then
-        DOMAIN=""
-      fi
-      verify_variable "$DOMAIN" "DOMAIN is empty and could not be derived from the Istio ingress gateway."
-      DOMAIN="$DOMAIN.xip.io"
-    fi
-    ;;
-esac
+# Domain used for routing to keptn services
+DOMAIN=$(kubectl get svc istio-ingressgateway -o json -n istio-system | jq -r .status.loadBalancer.ingress[0].hostname)
+if [[ $? != 0 ]]; then
+  print_error "Failed to get ingress gateway information." && exit 1
+fi
+if [[ $DOMAIN = "null" ]]; then
+  print_info "Could not get ingress gateway domain name. Trying to retrieve IP address instead."
+  DOMAIN=$(kubectl get svc istio-ingressgateway -o json -n istio-system | jq -r .status.loadBalancer.ingress[0].ip)
+  if [[ $DOMAIN = "null" ]]; then
+    DOMAIN=""
+  fi
+  verify_variable "$DOMAIN" "DOMAIN is empty and could not be derived from the Istio ingress gateway."
+  DOMAIN="$DOMAIN.xip.io"
+fi
+
 
 print_info "setupKeptn Using domain name: $DOMAIN"
 
@@ -69,9 +62,10 @@ cat ../manifests/knative/config-domain.yaml | \
 kubectl apply -f ../manifests/gen/config-domain.yaml
 verify_kubectl $? "Creating configmap config-domain in knative-serving namespace failed."
 
+# JAHN:SKIPPING
 # Creating cluster role binding
-kubectl apply -f ../manifests/keptn/keptn-rbac.yaml
-verify_kubectl $? "Creating cluster role for keptn failed."
+#kubectl apply -f ../manifests/keptn/keptn-rbac.yaml
+#verify_kubectl $? "Creating cluster role for keptn failed."
 
 # Creating config map to store mapping
 kubectl apply -f ../manifests/keptn/keptn-org-configmap.yaml

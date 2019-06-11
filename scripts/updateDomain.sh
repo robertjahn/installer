@@ -63,7 +63,6 @@ kubectl create --namespace istio-system secret tls istio-ingressgateway-certs --
 kubectl get gateway knative-ingress-gateway --namespace knative-serving -o=yaml | yq w - spec.servers[1].tls.mode SIMPLE | yq w - spec.servers[1].tls.privateKey /etc/istio/ingressgateway-certs/tls.key | yq w - spec.servers[1].tls.serverCertificate /etc/istio/ingressgateway-certs/tls.crt | kubectl apply -f -
 verify_kubectl $? "Updating knative ingress gateway with private key failed."
 
-
 rm key.pem
 rm certificate.pem
 

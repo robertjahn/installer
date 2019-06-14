@@ -22,3 +22,7 @@ cli/vendor/*
 
 # Built artifacts
 *.exe
+
+# install files
+helm-*-linux-amd64.tar.gz
+linux-amd64/
